@@ -10,11 +10,16 @@ services:
     command: start-dev
     environment:
       KEYCLOAK_ADMIN: gokulvenkat.dev@gmail.com
-      KEYCLOAK_ADMIN_PASSWORD: gokulvenkat.dev@gmail.com
+      KEYCLOAK_ADMIN_PASSWORD: Lg@2024
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/iudx
       KC_DB_USERNAME: gokul
       KC_DB_PASSWORD: Lg@2024
+      KC_HOSTNAME: localhost # ← ADD THIS
+      KC_HOSTNAME_STRICT: "false" # ← ADD THIS
+      KC_HOSTNAME_STRICT_HTTPS: "false" # ← ADD THIS
+      KC_HOSTNAME_URL: http://localhost:8080 # ← ADD THIS
+
     ports:
       - "8080:8080"
     depends_on:
@@ -65,10 +70,28 @@ services:
       KEYCLOAK_URL: http://keycloak:8080
       KEYCLOAK_REALM: my-app
       KEYCLOAK_CLIENT_ID: map-backend
-      KEYCLOAK_CLIENT_SECRET: mLxnMqxpItLutaNHi0j3fQBnSINmc84l
+      KEYCLOAK_CLIENT_SECRET: CNW1B5bihl9S9CnUnZR3R7cxPRujVujG
       SESSION_SECRET: supersecret
     depends_on:
       - postgres
+      - keycloak
+
+  # ------------------
+  # Frontend service
+  # ------------------
+  frontend:
+    build: ./frontend # path to your frontend Dockerfile
+    container_name: frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    working_dir: /app
+    command: npm run preview -- --host 0.0.0.0
+    environment:
+      VITE_API_BASE_URL: http://localhost:4000
+      VITE_KEYCLOAK_URL: http://localhost:8080
+    depends_on:
+      - backend
       - keycloak
 
 volumes:
