@@ -7,7 +7,9 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.0.5
     container_name: keycloak
-    command: start-dev
+    command:
+      - start-dev
+      - --import-realm
     environment:
       KEYCLOAK_ADMIN: gokulvenkat.dev@gmail.com
       KEYCLOAK_ADMIN_PASSWORD: Lg@2024
@@ -19,7 +21,8 @@ services:
       KC_HOSTNAME_STRICT: "false" # ← ADD THIS
       KC_HOSTNAME_STRICT_HTTPS: "false" # ← ADD THIS
       KC_HOSTNAME_URL: http://localhost:8080 # ← ADD THIS
-
+    volumes:
+    - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
     ports:
       - "8080:8080"
     depends_on:
@@ -40,21 +43,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  # ------------------
-  # pgAdmin (optional, web UI for Postgres)
-  # ------------------
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"
-    depends_on:
-      - postgres
 
   # ------------------
   # Backend service (Express)
