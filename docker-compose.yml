@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  # ------------------
+  # Keycloak service
+  # ------------------
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.5
+    container_name: keycloak
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: gokulvenkat.dev@gmail.com
+      KEYCLOAK_ADMIN_PASSWORD: gokulvenkat.dev@gmail.com
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/iudx
+      KC_DB_USERNAME: gokul
+      KC_DB_PASSWORD: Lg@2024
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  # ------------------
+  # PostgreSQL DB
+  # ------------------
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: gokul
+      POSTGRES_PASSWORD: Lg@2024
+      POSTGRES_DB: iudx
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ------------------
+  # pgAdmin (optional, web UI for Postgres)
+  # ------------------
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+  # ------------------
+  # Backend service (Express)
+  # ------------------
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: postgres://gokul:Lg%402024@postgres:5432/iudx
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_REALM: my-app
+      KEYCLOAK_CLIENT_ID: map-backend
+      KEYCLOAK_CLIENT_SECRET: mLxnMqxpItLutaNHi0j3fQBnSINmc84l
+      SESSION_SECRET: supersecret
+    depends_on:
+      - postgres
+      - keycloak
+
+volumes:
+  postgres_data:
