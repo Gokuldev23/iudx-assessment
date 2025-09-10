@@ -5,23 +5,26 @@ A full-stack web application where users can log in, mark their favorite locatio
 ## 🚀 Quick Setup (For Interviewers)
 
 ### Prerequisites
+
 - Docker and Docker Compose installed
 - Ports 5173, 4000, 8080, 5432 available
 
 ### Run the Application
+
 ```bash
-git clone [repository-url]
+git clone git@github.com:Gokuldev23/iudx-assessment.git
 cd location-marking-dashboard
 docker compose up -d
 ```
 
 **Wait 2-3 minutes** for all services to initialize, then access:
-- **Application**: http://localhost:5173
-- **Keycloak Admin**: http://localhost:8080/ (admin: `gokulvenkat.dev@gmail.com` / `Lg@2024`)
+
+- **Application**: <http://localhost:5173>
+- **Keycloak Admin**: <http://localhost:8080/> (admin: `gokulvenkat.dev@gmail.com` / `Lg@2024`)
 
 ## 🎯 How to Test
 
-1. Visit http://localhost:5173
+1. Visit <http://localhost:5173>
 2. Click "Login" → authenticate with Keycloak
 3. Click on map to drop markers
 4. Add descriptions to markers
@@ -36,15 +39,26 @@ docker compose up -d
 - **Containerization**: Docker Compose
 
 ## 📁 Project Structure
+
 ```
 ├── docker-compose.yml          # Multi-service orchestration
 ├── realm-export.json          # Pre-configured Keycloak realm
-├── frontend/                  # React application
-│   ├── Dockerfile
-│   └── src/
-├── backend/                   # Express.js API
-│   ├── Dockerfile
-│   └── server.js
+├── frontend/                   # React application
+│   ├── dist/                   # Build output
+│   ├── public/                 # Static assets
+│   ├── src/
+│   │   ├── components/         # React components
+│   │   ├── hooks/              # Custom React hooks
+│   │   └── services/           # API service calls
+│   ├── App.jsx                 # Main App component
+│   └── Dockerfile
+├── backend/                    # Express.js API
+│   ├── config/                 # Database & auth config
+│   ├── controllers/            # Route handlers
+│   ├── middleware/             # Auth & validation middleware
+│   ├── routes/                 # API routes
+│   ├── server.js               # Express server entry point
+│   └── Dockerfile
 └── README.md
 ```
 
@@ -62,12 +76,14 @@ docker compose up -d
 ## 🔧 Key Configuration
 
 ### Docker Services
+
 - **keycloak**: Authentication server with imported realm
 - **postgres**: Database with persistent storage
 - **backend**: Express API with Keycloak integration
 - **frontend**: React app with map functionality
 
 ### Environment Variables (Pre-configured)
+
 ```yaml
 # Backend connects to:
 - DATABASE_URL: postgres://gokul:Lg%402024@postgres:5432/iudx
@@ -81,7 +97,8 @@ docker compose up -d
 
 ## 🔍 Troubleshooting
 
-### If services don't start:
+### If services don't start
+
 ```bash
 # Check status
 docker compose ps
@@ -93,7 +110,8 @@ docker compose logs -f
 docker compose restart [service-name]
 ```
 
-### If ports are occupied:
+### If ports are occupied
+
 ```bash
 # Check port usage
 lsof -i :8080
@@ -104,7 +122,8 @@ docker compose down
 docker compose up -d
 ```
 
-### Reset everything:
+### Reset everything
+
 ```bash
 docker compose down -v  # Removes data volumes
 docker compose up --build -d
@@ -113,6 +132,7 @@ docker compose up --build -d
 ## 🎯 Testing Endpoints
 
 Once running, test these endpoints:
+
 - `GET http://localhost:4000/health` - Backend health check
 - `GET http://localhost:4000/api/markers` - Get user markers (requires auth)
 - `POST http://localhost:4000/api/markers` - Create marker (requires auth)
