@@ -2,7 +2,7 @@
 import Keycloak from "keycloak-js";
 
 const keycloakConfig = {
-  url: import.meta.env.VITE_KEYCLOAK_URL,
+  url: "http://localhost:8080",
   realm: "my-app",
   clientId: "map-frontend",
 };
