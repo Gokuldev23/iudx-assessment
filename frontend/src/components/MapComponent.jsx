@@ -44,7 +44,6 @@ const MapComponent = () => {
       latitude: selectedPosition.lat,
       longitude: selectedPosition.lng,
     };
-    console.log({markerData})
     if (editingMarker) {
       editMarker(editingMarker.id, markerData);
     } else {
