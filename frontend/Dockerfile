@@ -1,5 +1,5 @@
 # Dockerfile in ./frontend
-FROM node:22.12
+FROM node:22-alpine AS frontend
 
 WORKDIR /app
 
